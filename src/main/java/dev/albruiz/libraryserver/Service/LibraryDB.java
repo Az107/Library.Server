@@ -49,7 +49,7 @@ public class LibraryDB implements ILibrary {
 
     @Override
     public User rentBook(User user, Book book) {
-        user.rentBook(book);
+        user.addBook(book);
         mongoHelper.addBooktoUser(user.getName(),(Book) book);
         return user;
     }

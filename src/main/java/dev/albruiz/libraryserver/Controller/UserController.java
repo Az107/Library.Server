@@ -3,6 +3,7 @@ package dev.albruiz.libraryserver.Controller;
 import dev.albruiz.libraryserver.Model.Book;
 import dev.albruiz.libraryserver.Model.User;
 import dev.albruiz.libraryserver.Service.ILibrary;
+import dev.albruiz.libraryserver.Service.IUserLibrary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class UserController implements IUserController{
 
     @Autowired
-    UserController(@Qualifier("libraryDB") ILibrary library){
-        this.library = library;
+    UserController(IUserLibrary UserLibrary){
+        this.library = UserLibrary;
     }
-    ILibrary library;
+    IUserLibrary library;
 
 
 
@@ -37,27 +38,14 @@ public class UserController implements IUserController{
     @Override
     @GetMapping("/{userName}/Rent/{bookName}")
     public User RentBook(@PathVariable String bookName, String userName) {
-        User user = library.findUser(userName);
-        Book book = library.findBook(bookName);
-
-
-        if (user != null && book != null){
-            return  library.rentBook(user,book);
-        }
-        return  null;
+        return  library.rentBook(userName,bookName);
     }
 
     @Override
     @GetMapping("/{userName}/Return/{bookName}")
     public User ReturnBook(@PathVariable String bookName, String userName) {
-        User user = library.findUser(userName);
-        Book book = library.findBook(bookName);
+        return  library.returnBook(userName,bookName);
 
-
-        if (user != null && book != null){
-            return  library.returnBook(user,book);
-        }
-        return  null;
     }
 
     @Override

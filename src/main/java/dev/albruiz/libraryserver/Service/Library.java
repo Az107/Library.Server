@@ -54,7 +54,7 @@ public class Library implements  ILibrary{
 
     @Override
     public User rentBook(User user, Book book) {
-        user.rentBook(book);
+        user.addBook(book);
         return user;
     }
 

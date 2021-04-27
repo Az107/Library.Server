@@ -8,12 +8,12 @@ public class User  {
     List<Book> books = new ArrayList<>();
 
     String name;
-    public Book rentBook(Book book) {
+    public Book addBook(Book book) {
         books.add((Book) book);
         return book;
     }
 
-    public Book returnBook(Book book) {
+    public Book removeBook(Book book) {
         books.remove(book);
         return  book;
     }
