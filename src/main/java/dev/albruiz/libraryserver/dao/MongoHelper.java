@@ -1,4 +1,4 @@
-package dev.albruiz.libraryserver.Service;
+package dev.albruiz.libraryserver.dao;
 
 
 import com.mongodb.MongoClientSettings;
@@ -22,7 +22,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 
 
 @Service
-public class MongoHelper {
+public class MongoHelper implements IDataHelper {
     private final MongoDatabase database;
     private final MongoCollection<Author> authorsCollection;
     private final MongoCollection<Book> bookCollection;

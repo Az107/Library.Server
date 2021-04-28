@@ -1,60 +1,59 @@
 package dev.albruiz.libraryserver.Service;
 
-import dev.albruiz.libraryserver.Model.*;
+import dev.albruiz.libraryserver.Model.Author;
+import dev.albruiz.libraryserver.Model.Book;
+import dev.albruiz.libraryserver.Model.User;
+import dev.albruiz.libraryserver.dao.IDataHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
-public class Library implements  ILibrary{
+public class Library implements ILibrary {
 
-    List<Book> books = new ArrayList<>();
-    List<Author> authors = new ArrayList<>();
-    List<User> users = new ArrayList<>();
+    private IDataHelper simpleDataHelper;
 
+    @Autowired
+    public Library(IDataHelper SimpleDataHelper){
+        this.simpleDataHelper = simpleDataHelper;
+    }
+    
     @Override
     public Book[] getBooks() {
-        return this.books.toArray(new Book[this.books.size()]);
+        return this.simpleDataHelper.getBooks().toArray(new Book[0]);
     }
 
     @Override
     public Author[] getAuthors() {
-        return this.authors.toArray(new Author[this.authors.size()]);
+        return this.simpleDataHelper.getAuthors().toArray(new Author[0]);
     }
 
     @Override
     public User[] getUsers() {
-        return this.users.toArray(new User[this.users.size()]);
+        return this.simpleDataHelper.getUsers().toArray(new User[0]);
     }
+
 
     @Override
     public User findUser(String name) {
-        for (User user: users) {
-            if (user.getName().equals(name)) return user;
-        }
-        return null;
+        return simpleDataHelper.findUser(name);
     }
 
     @Override
     public Book findBook(String name) {
-        for (Book book: books) {
-            if (book.getName().equals(name)) return book;
-        }
-        return null;
+        return  simpleDataHelper.findBook(name);
     }
 
     @Override
     public Author findAuthor(String name) {
-        for (Author author: authors) {
-            if (author.getName().equals(name)) return author;
-        }
-        return null;
+         return  simpleDataHelper.findAuthor(name);
     }
+
 
     @Override
     public User rentBook(User user, Book book) {
         user.addBook(book);
+        simpleDataHelper.addBooktoUser(user.getName(),(Book) book);
         return user;
     }
 
@@ -63,24 +62,25 @@ public class Library implements  ILibrary{
         return null;
     }
 
+
     @Override
     public User addUser(String userName) {
         User user = new User(userName);
-        users.add(user);
-        return  user;
+        this.simpleDataHelper.addUser(user);
+        return user;
     }
 
     @Override
     public Book addBook(String bookName, Author author) {
         Book book = new Book(bookName,author);
-        books.add(book);
-        return  book;
+        this.simpleDataHelper.addBook(book);
+        return book;
     }
 
     @Override
-    public Author addAuthor(String authorName,int year) {
+    public Author addAuthor(String authorName, int year) {
         Author author = new Author(authorName,year);
-        authors.add(author);
+        this.simpleDataHelper.addAuthors(author);
         return author;
     }
 }

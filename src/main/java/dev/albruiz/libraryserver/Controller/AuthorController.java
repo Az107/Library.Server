@@ -1,12 +1,11 @@
 package dev.albruiz.libraryserver.Controller;
 
 import dev.albruiz.libraryserver.Model.Author;
-import dev.albruiz.libraryserver.Service.AuthorLibrary;
 import dev.albruiz.libraryserver.Service.IAuthorLibrary;
-import dev.albruiz.libraryserver.Service.ILibrary;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -36,7 +35,7 @@ public class AuthorController implements IAuthorController {
     @Override
     @GetMapping("/")
     @ResponseBody
-    public Author[] getAuthor() {
+    public List<Author> getAuthor() {
         return library.getAuthors();
     }
 }

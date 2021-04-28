@@ -6,6 +6,8 @@ import dev.albruiz.libraryserver.Service.IBookLibrary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("Book")
 public class BookController implements IBookController {
@@ -29,7 +31,7 @@ public class BookController implements IBookController {
     @Override
     @GetMapping("/")
     @ResponseBody
-    public Book[] getBooks() {
+    public List<Book> getBooks() {
         return booklibrary.getBooks();
     }
 

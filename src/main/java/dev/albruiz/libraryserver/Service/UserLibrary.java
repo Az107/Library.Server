@@ -2,6 +2,7 @@ package dev.albruiz.libraryserver.Service;
 
 import dev.albruiz.libraryserver.Model.Book;
 import dev.albruiz.libraryserver.Model.User;
+import dev.albruiz.libraryserver.dao.IDataHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,30 +14,30 @@ public class UserLibrary implements  IUserLibrary {
 
 
 
-    List<User> users = new ArrayList<>();
+    IDataHelper dataHelper;
     IBookLibrary bookLibrary;
 
     @Autowired
-    UserLibrary(IBookLibrary bookLibrary){this.bookLibrary = bookLibrary;}
+    UserLibrary(IBookLibrary bookLibrary,IDataHelper SimpleDataHelper){
+        this.bookLibrary = bookLibrary;
+        this.dataHelper = SimpleDataHelper;
+    }
 
     @Override
-    public User[] getUsers() {
-        return this.users.toArray(new User[this.users.size()]);
+    public List<User> getUsers() {
+        return dataHelper.getUsers();
     }
 
     @Override
     public User findUser(String name) {
-        for (User user: users) {
-            if (user.getName().equals(name)) return user;
-        }
-        return null;
+        return dataHelper.findUser(name);
     }
 
     @Override
     public User rentBook(String userName,String bookName) {
         User user = findUser(userName);
         Book book = bookLibrary.findBook(bookName);
-        user.addBook(book);
+        dataHelper.addBooktoUser(userName,book);
         return user;
     }
 
@@ -51,7 +52,7 @@ public class UserLibrary implements  IUserLibrary {
     @Override
     public User addUser(String userName) {
         User user = new User(userName);
-        users.add(user);
+        dataHelper.addUser(user);
         return  user;
     }
 }

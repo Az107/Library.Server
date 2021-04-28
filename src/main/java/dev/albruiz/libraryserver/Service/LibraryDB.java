@@ -1,6 +1,8 @@
 package dev.albruiz.libraryserver.Service;
 
 import dev.albruiz.libraryserver.Model.*;
+import dev.albruiz.libraryserver.dao.IDataHelper;
+import dev.albruiz.libraryserver.dao.MongoHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class LibraryDB implements ILibrary {
 
-    private MongoHelper mongoHelper;
+    private IDataHelper mongoHelper;
 
     @Autowired
-    LibraryDB(MongoHelper mongoHelper){
+    public LibraryDB(IDataHelper mongoHelper){
         this.mongoHelper = mongoHelper;
     }
 

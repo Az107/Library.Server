@@ -2,6 +2,7 @@ package dev.albruiz.libraryserver.Service;
 
 import dev.albruiz.libraryserver.Model.Author;
 import dev.albruiz.libraryserver.Model.Book;
+import dev.albruiz.libraryserver.dao.IDataHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,31 +12,30 @@ import java.util.List;
 @Service
 public class BookLibrary implements IBookLibrary{
 
-    @Autowired
-    BookLibrary(IAuthorLibrary authorLibrary){this.authorLibrary = authorLibrary;}
-
     IAuthorLibrary authorLibrary;
+    IDataHelper dataHelper;
 
-    List<Book> books = new ArrayList<>();
+    @Autowired
+    BookLibrary(IAuthorLibrary authorLibrary,IDataHelper SimpleDataHelper){
+        this.authorLibrary = authorLibrary;
+        this.dataHelper = SimpleDataHelper;
+    }
 
     @Override
-    public Book[] getBooks() {
-        return this.books.toArray(new Book[this.books.size()]);
+    public List<Book> getBooks() {
+        return dataHelper.getBooks();
     }
 
     @Override
     public Book findBook(String name) {
-        for (Book book: books) {
-            if (book.getName().equals(name)) return book;
-        }
-        return null;
+        return dataHelper.findBook(name);
     }
 
     @Override
     public Book addBook(String bookName, String authorName) {
         Author author = authorLibrary.findAuthor(authorName);
         Book book = new Book(bookName,author);
-        books.add(book);
+        dataHelper.addBook(book);
         return  book;
     }
 }

@@ -1,7 +1,10 @@
 package dev.albruiz.libraryserver.Service;
 
 import dev.albruiz.libraryserver.Model.Author;
+import dev.albruiz.libraryserver.dao.IDataHelper;
+import dev.albruiz.libraryserver.dao.MongoHelper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,18 +15,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class AuthorLibraryTest {
 
     @MockBean
-    AuthorLibrary AuthorLibraryMock;
+    IDataHelper mongoHelperMock;
+
+
 
     AuthorLibraryTest(){
-        AuthorLibraryMock = Mockito.mock(AuthorLibrary.class);
-        AuthorLibraryMock.authors.add(new Author("test1",2011));
+
+    }
+
+    @BeforeAll
+    void configMock() {
+        mongoHelperMock = Mockito.mock(MongoHelper.class);
+        Mockito.when(mongoHelperMock.findAuthor(Mockito.anyString())).thenReturn(new Author("Test",2011));
     }
 
     @Test
     void getAuthors() {
-        Author[] authors = new Author[]{new Author("test1",2011)};
-        AuthorLibraryMock.getAuthors();
-        Assertions.assertArrayEquals(AuthorLibraryMock.getAuthors(),authors);
 
     }
 

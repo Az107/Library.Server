@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("User")
@@ -31,7 +33,7 @@ public class UserController implements IUserController{
     @Override
     @GetMapping("/")
     @ResponseBody
-    public User[] getUsers() {
+    public List<User> getUsers() {
         return library.getUsers();
     }
 
