@@ -1,11 +1,8 @@
 package dev.albruiz.libraryserver.Controller;
 
-import dev.albruiz.libraryserver.Model.Book;
 import dev.albruiz.libraryserver.Model.User;
-import dev.albruiz.libraryserver.Service.ILibrary;
-import dev.albruiz.libraryserver.Service.IUserLibrary;
+import dev.albruiz.libraryserver.Service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,10 +13,10 @@ import java.util.List;
 public class UserController implements IUserController{
 
     @Autowired
-    UserController(IUserLibrary UserLibrary){
-        this.library = UserLibrary;
+    UserController(IUserService userService){
+        this.service = userService;
     }
-    IUserLibrary library;
+    IUserService service;
 
 
 
@@ -27,26 +24,26 @@ public class UserController implements IUserController{
     @Override
     @ResponseBody
     public User addUser(@RequestBody String userName) {
-        return library.addUser(userName);
+        return service.addUser(userName);
     }
 
     @Override
     @GetMapping("/")
     @ResponseBody
     public List<User> getUsers() {
-        return library.getUsers();
+        return service.getUsers();
     }
 
     @Override
     @GetMapping("/{userName}/Rent/{bookName}")
     public User RentBook(@PathVariable String bookName, String userName) {
-        return  library.rentBook(userName,bookName);
+        return  service.rentBook(userName,bookName);
     }
 
     @Override
     @GetMapping("/{userName}/Return/{bookName}")
     public User ReturnBook(@PathVariable String bookName, String userName) {
-        return  library.returnBook(userName,bookName);
+        return  service.returnBook(userName,bookName);
 
     }
 
@@ -54,6 +51,6 @@ public class UserController implements IUserController{
     @GetMapping("/{userName}")
     @ResponseBody
     public User findUser(@PathVariable String userName) {
-        return library.findUser(userName);
+        return service.findUser(userName);
     }
 }

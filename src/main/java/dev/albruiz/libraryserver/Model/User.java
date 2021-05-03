@@ -3,7 +3,7 @@ package dev.albruiz.libraryserver.Model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User  {
+public class User implements LibraryObject {
 
     List<Book> books = new ArrayList<>();
 

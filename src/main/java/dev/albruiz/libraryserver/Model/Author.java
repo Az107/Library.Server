@@ -1,6 +1,6 @@
 package dev.albruiz.libraryserver.Model;
 
-public class Author  {
+public class Author  implements LibraryObject {
 
     String name;
     int year;

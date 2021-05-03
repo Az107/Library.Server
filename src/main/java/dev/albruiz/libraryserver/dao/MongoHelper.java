@@ -9,87 +9,55 @@ import dev.albruiz.libraryserver.Model.Book;
 import dev.albruiz.libraryserver.Model.User;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.push;
-import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 
-@Service
-public class MongoHelper implements IDataHelper {
+
+public class MongoHelper<T extends SimpleDataHelper> implements IDataHelper {
     private final MongoDatabase database;
-    private final MongoCollection<Author> authorsCollection;
-    private final MongoCollection<Book> bookCollection;
-    private final MongoCollection<User> userCollection;
+    private final MongoCollection<T> collection;
 
-    public Book findBook(String Name){
-        Book book =  bookCollection.find(eq("name",Name)).first();
-        return book;
-    }
 
-    public List<Book> getBooks(){
-        List<Book> books = new ArrayList<>();
-        FindIterable<Book> bookIterable =  bookCollection.find();
-        bookIterable.forEach((books::add));
-        return  books;
-    }
 
-    public void addBook(Book book){
-        bookCollection.insertOne(book);
-    }
-
-    public List<Author> getAuthors(){
-        List<Author> authors = new ArrayList<>();
-        FindIterable<Author> authorsIterable =  authorsCollection.find();
-        authorsIterable.forEach((authors::add));
-        return  authors;
-    }
-
-    public Author findAuthor(String Name){
-        return authorsCollection.find(eq("name",Name)).first();
-    }
-
-    public void addAuthors(Author author){
-        authorsCollection.insertOne(author);
-    }
-
-    public List<User> getUsers(){
-        List<User> users = new ArrayList<>();
-        FindIterable<User> usersIterable =  userCollection.find();
-        usersIterable.forEach((users::add));
-        return  users;
-    }
-
-    public User findUser(String Name){
-        return userCollection.find(eq("name",Name)).first();
-    }
-
-    public void addUser(User user){
-        userCollection.insertOne(user);
-    }
-
-    public void addBooktoUser(String userName,Book book){
-        UpdateResult updateResult = userCollection.updateOne(eq("name",userName),push("books",book));
-
-    }
-
-    MongoHelper(){
+    MongoHelper(Class<T> tClass){
         CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
         MongoClient client = MongoClients.create("mongodb://servidor:27017");
         database =  client.getDatabase("Library").withCodecRegistry(pojoCodecRegistry);
-        authorsCollection = database.getCollection("Authors", Author.class);
-        bookCollection = database.getCollection("Books", Book.class);
-        userCollection = database.getCollection("Users", User.class);
+        collection = database.getCollection(tClass.getName(), tClass);
+
 
 
     }
 
+    @Override
+    public T find(String Name) {
+        T item =  collection.find(eq("name",Name)).first();
+        return item;
+    }
+
+    @Override
+    public List<T> getAll() {
+        List<T> items = new ArrayList<>();
+        FindIterable<T> tIterable =  collection.find();
+        tIterable.forEach((items::add));
+        return  items;
+    }
+
+    @Override
+    public void add(Object o) {
+        collection.insertOne((T)o);
+    }
 }

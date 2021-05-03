@@ -5,7 +5,7 @@ import dev.albruiz.libraryserver.Model.User;
 
 import java.util.List;
 
-public interface IUserLibrary {
+public interface IUserService {
 
     List<User> getUsers();
     User findUser(String name);

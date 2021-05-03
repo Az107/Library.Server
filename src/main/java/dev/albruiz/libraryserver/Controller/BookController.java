@@ -2,7 +2,7 @@ package dev.albruiz.libraryserver.Controller;
 
 import dev.albruiz.libraryserver.Model.Author;
 import dev.albruiz.libraryserver.Model.Book;
-import dev.albruiz.libraryserver.Service.IBookLibrary;
+import dev.albruiz.libraryserver.Service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,17 +14,17 @@ public class BookController implements IBookController {
 
 
     @Autowired
-    BookController(IBookLibrary bookLibrary){
-        this.booklibrary = bookLibrary;
+    BookController(IBookService bookService){
+        this.service = bookService;
     }
 
-    IBookLibrary booklibrary;
+    IBookService service;
 
     @Override
     @PostMapping("/add/")
     @ResponseBody
     public Book addBook(@RequestBody String bookName, String authorName) {
-        return booklibrary.addBook(bookName,authorName );
+        return service.addBook(bookName,authorName );
 
     }
 
@@ -32,13 +32,13 @@ public class BookController implements IBookController {
     @GetMapping("/")
     @ResponseBody
     public List<Book> getBooks() {
-        return booklibrary.getBooks();
+        return service.getBooks();
     }
 
     @Override
     @GetMapping("/{bookName}")
     @ResponseBody
     public Book findBook(@PathVariable String bookName) {
-        return booklibrary.findBook(bookName);
+        return service.findBook(bookName);
     }
 }

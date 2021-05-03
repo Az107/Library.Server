@@ -12,26 +12,13 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.push;
 
-public interface IDataHelper {
+public interface IDataHelper<T> {
 
-    public Book findBook(String Name);
+    public T find(String Name);
 
-    public List<Book> getBooks();
+    public List<T> getAll();
 
-    public void addBook(Book book);
+    public void add(T o);
 
-    public List<Author> getAuthors();
-
-    public Author findAuthor(String Name);
-
-    public void addAuthors(Author author);
-
-    public List<User> getUsers();
-
-    public User findUser(String Name);
-
-    public void addUser(User user);
-
-    public void addBooktoUser(String userName,Book book);
 
 }
