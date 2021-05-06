@@ -18,33 +18,59 @@ import java.util.Arrays;
 @SpringBootTest
 class AuthorServiceTest {
 
+    @MockBean
     IDataHelper<Author> dataHelper;
 
+    @Autowired
     AuthorService authorService;
 
-    AuthorServiceTest(){
-        dataHelper = Mockito.mock(IDataHelper.class);
-        Author author1 = new Author("Test",2011);
-        Author author2 = new Author("Test2",2011);
+
+    void given(){
+        Author author1 = new Author("Test", 2011);
+        Author author2 = new Author("Test2", 2011);
 
         Mockito.when(dataHelper.getAll()).thenReturn(Arrays.asList(author1, author2));
         Mockito.when(dataHelper.find(Mockito.anyString())).thenReturn(author1);
-        authorService = new AuthorService(dataHelper);
         System.out.println("config mock");
     }
 
+
     @Test
     void getAuthors() {
+        // GIVEN
+        given();
+
+        // WHEN
         int c = authorService.getAuthors().size();
-        Assertions.assertEquals(c,2);
+
+        // THEN
+        Assertions.assertEquals(c, 2);
+
+        // CLEAN
+        Mockito.reset(dataHelper);
     }
 
     @Test
     void findAuthor() {
-        Author author = authorService.findAuthor("test");
-        Assertions.assertEquals(author.getName(),new Author("Test",2011).getName());
-        Assertions.assertEquals(author.getYear(),new Author("Test",2011).getYear());
+//      // GIVEN
+        given();
 
+        String authorName = "Test";
+        int year = 2011;
+        Author author1 = new Author(authorName, year);
+        Author author2 = new Author("Test2", 2011);
+
+        Mockito.when(dataHelper.getAll()).thenReturn(Arrays.asList(author1, author2));
+        Mockito.when(dataHelper.find(Mockito.anyString())).thenReturn(author1);
+//        authorService = new AuthorService(dataHelper);
+        System.out.println("config mock");
+
+        Author author = authorService.findAuthor(authorName);
+
+        Assertions.assertEquals(author.getName(), authorName);
+        Assertions.assertEquals(author.getYear(), year);
+
+        Mockito.reset(dataHelper);
     }
 
 

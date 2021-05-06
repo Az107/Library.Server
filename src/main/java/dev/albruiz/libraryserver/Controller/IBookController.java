@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IBookController {
 
-    Book addBook(String bookName, String authorName);
+    Book addBook(Book book);
     List<Book> getBooks();
     Book findBook(String bookName);
 

@@ -23,9 +23,9 @@ public class BookController implements IBookController {
     @Override
     @PostMapping("/add/")
     @ResponseBody
-    public Book addBook(@RequestBody String bookName, String authorName) {
-        return service.addBook(bookName,authorName );
-
+    public Book addBook(@RequestBody Book book) {
+        if (book.getName() != null) return service.addBook(book.getName(),book.getAuthor().getName());
+        return null;
     }
 
     @Override

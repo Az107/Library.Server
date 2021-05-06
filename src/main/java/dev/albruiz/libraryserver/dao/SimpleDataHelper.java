@@ -1,6 +1,7 @@
 package dev.albruiz.libraryserver.dao;
 
 import dev.albruiz.libraryserver.Model.LibraryObject;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -9,8 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class SimpleDataHelper<T extends LibraryObject> implements IDataHelper{
+
+public class SimpleDataHelper<T extends LibraryObject> implements IDataHelper<T>{
 
     List<T> data = new ArrayList<>();
 
@@ -29,7 +30,7 @@ public class SimpleDataHelper<T extends LibraryObject> implements IDataHelper{
 
 
     @Override
-    public void add(Object item) {
+    public void add(T item) {
         data.add(((T)item));
     }
 

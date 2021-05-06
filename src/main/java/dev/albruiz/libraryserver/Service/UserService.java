@@ -3,6 +3,7 @@ package dev.albruiz.libraryserver.Service;
 import dev.albruiz.libraryserver.Model.Book;
 import dev.albruiz.libraryserver.Model.User;
 import dev.albruiz.libraryserver.dao.IDataHelper;
+import dev.albruiz.libraryserver.dao.MongoUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,12 +18,13 @@ public class UserService implements  IUserService {
 
 
     IDataHelper<User> dataHelper;
-    IBookService bookLibrary;
+    IDataHelper<Book> dataHelperBook;
+
 
     @Autowired
-    UserService(IBookService bookLibrary, @Qualifier("simpleDataHelper") IDataHelper<User> dataHelper){
-        this.bookLibrary = bookLibrary;
+    UserService(IDataHelper<User>  dataHelper, IDataHelper<Book> dataHelperBook){
         this.dataHelper = dataHelper;
+        this.dataHelperBook = dataHelperBook;
     }
 
     @Override
@@ -38,15 +40,16 @@ public class UserService implements  IUserService {
     @Override
     public User rentBook(String userName,String bookName) {
         User user = findUser(userName);
-        Book book = bookLibrary.findBook(bookName);
-        //dataHelper.addBooktoUser(userName,book);
+        Book book = dataHelperBook.find(bookName);
+        user.addBook(book);
+        //dataHelper.addBook(userName,book);
         return user;
     }
 
     @Override
     public User returnBook(String  userName, String bookName) {
         User user = findUser(userName);
-        Book book = bookLibrary.findBook(bookName);
+        Book book = dataHelperBook.find(bookName);
         user.addBook(book);
         return user;
     }

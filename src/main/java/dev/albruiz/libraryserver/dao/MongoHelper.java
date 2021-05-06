@@ -6,9 +6,11 @@ import com.mongodb.client.*;
 import com.mongodb.client.result.UpdateResult;
 import dev.albruiz.libraryserver.Model.Author;
 import dev.albruiz.libraryserver.Model.Book;
+import dev.albruiz.libraryserver.Model.LibraryObject;
 import dev.albruiz.libraryserver.Model.User;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -24,23 +26,9 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 
 
-public class MongoHelper<T extends SimpleDataHelper> implements IDataHelper {
-    private final MongoDatabase database;
-    private final MongoCollection<T> collection;
+public class MongoHelper<T extends LibraryObject> implements IDataHelper<T> {
 
-
-
-    MongoHelper(Class<T> tClass){
-        CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-
-        MongoClient client = MongoClients.create("mongodb://servidor:27017");
-        database =  client.getDatabase("Library").withCodecRegistry(pojoCodecRegistry);
-        collection = database.getCollection(tClass.getName(), tClass);
-
-
-
-    }
+    protected MongoCollection<T> collection;
 
     @Override
     public T find(String Name) {
@@ -57,7 +45,7 @@ public class MongoHelper<T extends SimpleDataHelper> implements IDataHelper {
     }
 
     @Override
-    public void add(Object o) {
+    public void add(T o) {
         collection.insertOne((T)o);
     }
 }

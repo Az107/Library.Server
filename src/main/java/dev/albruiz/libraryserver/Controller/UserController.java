@@ -36,13 +36,13 @@ public class UserController implements IUserController{
 
     @Override
     @GetMapping("/{userName}/Rent/{bookName}")
-    public User RentBook(@PathVariable String bookName, String userName) {
+    public User RentBook(@PathVariable String bookName,@PathVariable String userName) {
         return  service.rentBook(userName,bookName);
     }
 
     @Override
     @GetMapping("/{userName}/Return/{bookName}")
-    public User ReturnBook(@PathVariable String bookName, String userName) {
+    public User ReturnBook(@PathVariable String bookName,@PathVariable String userName) {
         return  service.returnBook(userName,bookName);
 
     }

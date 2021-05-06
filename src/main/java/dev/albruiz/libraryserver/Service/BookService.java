@@ -13,12 +13,12 @@ import java.util.List;
 @Service
 public class BookService implements IBookService {
 
-    IAuthorService authorService;
+    IDataHelper<Author> dataHelperAuthor;
     IDataHelper<Book> dataHelper;
 
     @Autowired
-    BookService(IAuthorService authorService, @Qualifier("simpleDataHelper") IDataHelper<Book> dataHelper){
-        this.authorService = authorService;
+    BookService(IDataHelper<Book> dataHelper,IDataHelper<Author> dataHelperAuthor){
+        this.dataHelperAuthor = dataHelperAuthor;
         this.dataHelper = dataHelper;
     }
 
@@ -34,7 +34,7 @@ public class BookService implements IBookService {
 
     @Override
     public Book addBook(String bookName, String authorName) {
-        Author author = authorService.findAuthor(authorName);
+        Author author = dataHelperAuthor.find(authorName);
         Book book = new Book(bookName,author);
         dataHelper.add(book);
         return  book;

@@ -2,6 +2,8 @@ package dev.albruiz.libraryserver.Service;
 
 import dev.albruiz.libraryserver.Model.Author;
 import dev.albruiz.libraryserver.dao.IDataHelper;
+import dev.albruiz.libraryserver.dao.MongoAuthor;
+import dev.albruiz.libraryserver.dao.MongoHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +17,7 @@ public class AuthorService implements IAuthorService {
     IDataHelper<Author> dataHelper;
 
     @Autowired
-    AuthorService(@Qualifier("simpleDataHelper") IDataHelper<Author> dataHelper){
+    AuthorService(IDataHelper<Author> dataHelper){
         this.dataHelper = dataHelper;
     }
 
