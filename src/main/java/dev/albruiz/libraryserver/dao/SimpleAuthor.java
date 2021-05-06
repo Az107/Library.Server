@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Profile("inMemory")
-public class SimpleAuthor extends SimpleDataHelper<Author>  implements IDataHelper<Author> {
+public class SimpleAuthor extends SimpleDataHelper<Author>{
 }

@@ -13,7 +13,7 @@ import static com.mongodb.client.model.Updates.push;
 
 @Repository
 @Profile("mongo")
-public class MongoUser extends MongoHelper<User>  implements IDataHelper<User> {
+public class MongoUser extends MongoHelper<User> {
 
 
     public MongoUser(MongoDatabase database) {

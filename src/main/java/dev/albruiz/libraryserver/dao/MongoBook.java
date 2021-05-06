@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 @Profile("mongo")
-public class MongoBook extends MongoHelper<Book> implements IDataHelper<Book> {
+public class MongoBook extends MongoHelper<Book> {
 
 
     public MongoBook(MongoDatabase database) {

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Profile("inMemory")
-public class SimpleBook extends SimpleDataHelper<Book>  implements IDataHelper<Book> {
+public class SimpleBook extends SimpleDataHelper<Book>  {
 }

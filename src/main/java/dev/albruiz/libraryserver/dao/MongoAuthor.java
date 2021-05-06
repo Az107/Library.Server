@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Profile("mongo")
-public class MongoAuthor extends MongoHelper<Author> implements IDataHelper<Author> {
+public class MongoAuthor extends MongoHelper<Author> {
 
     public MongoAuthor(MongoDatabase database) {
         this.collection = database.getCollection("Authors", Author.class);

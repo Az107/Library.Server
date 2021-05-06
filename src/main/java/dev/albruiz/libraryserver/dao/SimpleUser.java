@@ -11,7 +11,7 @@ import static com.mongodb.client.model.Updates.push;
 
 @Repository
 @Profile("inMemory")
-public class SimpleUser extends SimpleDataHelper<User>  implements IDataHelper<User> {
+public class SimpleUser extends SimpleDataHelper<User>  {
 
     public void addBooktoUser(User user, Book book){
         user.addBook(book);

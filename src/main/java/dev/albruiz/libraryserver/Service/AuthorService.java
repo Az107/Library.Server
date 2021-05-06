@@ -28,11 +28,12 @@ public class AuthorService implements IAuthorService {
 
     @Override
     public Author findAuthor(String name) {
-            return dataHelper.find(name);
+        return dataHelper.find(name);
     }
 
     @Override
     public Author addAuthor(String authorName, int year) {
+        if (authorName == null) return null;
         Author author = new Author(authorName,year);
         dataHelper.add(author);
         return author;
