@@ -2,14 +2,11 @@ package dev.albruiz.libraryserver.Service;
 
 import dev.albruiz.libraryserver.Model.Book;
 import dev.albruiz.libraryserver.Model.User;
+import dev.albruiz.libraryserver.Service.Exceptions.NotFoundException;
 import dev.albruiz.libraryserver.dao.IDataHelper;
-import dev.albruiz.libraryserver.dao.MongoUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,12 +30,14 @@ public class UserService implements  IUserService {
     }
 
     @Override
-    public User findUser(String name) {
-        return dataHelper.find(name);
+    public User findUser(String name) throws NotFoundException {
+        User user = dataHelper.find(name);
+        if (user == null) throw new NotFoundException();
+        return user;
     }
 
     @Override
-    public User rentBook(String userName,String bookName) {
+    public User rentBook(String userName, String bookName) throws NotFoundException {
         User user = findUser(userName);
         Book book = dataHelperBook.find(bookName);
         user.addBook(book);
@@ -47,7 +46,7 @@ public class UserService implements  IUserService {
     }
 
     @Override
-    public User returnBook(String  userName, String bookName) {
+    public User returnBook(String userName, String bookName) throws NotFoundException {
         User user = findUser(userName);
         Book book = dataHelperBook.find(bookName);
         user.addBook(book);
@@ -55,9 +54,8 @@ public class UserService implements  IUserService {
     }
 
     @Override
-    public User addUser(String userName) {
+    public void addUser(String userName) {
         User user = new User(userName);
         dataHelper.add(user);
-        return  user;
     }
 }

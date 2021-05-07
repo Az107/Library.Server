@@ -1,26 +1,18 @@
 package dev.albruiz.libraryserver.Service;
 
 import dev.albruiz.libraryserver.Model.Author;
-import dev.albruiz.libraryserver.Model.LibraryObject;
+import dev.albruiz.libraryserver.Service.Exceptions.NotFoundException;
 import dev.albruiz.libraryserver.dao.IDataHelper;
-import org.junit.jupiter.api.Assertions;
-import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
-
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.matchers.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import javax.activation.DataHandler;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class AuthorServiceTest {
@@ -83,23 +75,22 @@ class AuthorServiceTest {
     }
 
     @Test
-    void findAuthor() {
+    void findAuthor() throws NotFoundException {
         // GIVEN
         Author author = new Author("Test", 2011);
         Mockito.when(dataHelper.find(Mockito.anyString())).thenReturn(author);
 
-        // WHEN
-        Author authorFound = authorService.findAuthor(author.getName());
+        // THEN
 
+        authorService.findAuthor(author.getName());
 
         // THEN
-        assertThat(authorFound).isEqualTo(author);
 
         // CLEAN
         Mockito.reset(dataHelper);
     }
 
-    @Test
+    @Test()
     void findAuthorNull() {
         // GIVEN
         Author author = new Author("Test", 2011);
@@ -141,12 +132,10 @@ class AuthorServiceTest {
         Author author = new Author("Test", 2011);
 
         // WHEN
-        Author authorFound = authorService.addAuthor(author.getName(),author.getYear());
+        authorService.addAuthor(author.getName(), author.getYear());
 
 
         // THEN
-        assertThat(authorFound.getName()).isEqualTo(author.getName());
-        assertThat(authorFound.getYear()).isEqualTo(author.getYear());
 
 
         // CLEAN
@@ -159,11 +148,11 @@ class AuthorServiceTest {
         Author author = new Author("Test", 2011);
 
         // WHEN
-        Author authorFound = authorService.addAuthor(null,0);
+        authorService.addAuthor(null, 0);
 
 
         // THEN
-        assertThat(authorFound).isNull();
+
 
 
         // CLEAN
@@ -176,11 +165,10 @@ class AuthorServiceTest {
         Author author = new Author("Test", 2011);
         Mockito.doThrow(new Exception()).when(dataHelper).add(Mockito.any(Author.class));
         // WHEN
-        Author authorFound = authorService.addAuthor(author.getName(),author.getYear());
+        authorService.addAuthor(author.getName(), author.getYear());
 
 
         // THEN
-        assertThat(authorFound).isNull();
 
 
         // CLEAN

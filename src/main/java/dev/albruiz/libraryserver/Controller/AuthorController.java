@@ -1,8 +1,10 @@
 package dev.albruiz.libraryserver.Controller;
 
 import dev.albruiz.libraryserver.Model.Author;
+import dev.albruiz.libraryserver.Service.Exceptions.NotFoundException;
 import dev.albruiz.libraryserver.Service.IAuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,24 +15,29 @@ import java.util.List;
 public class AuthorController implements IAuthorController {
 
     @Autowired
-    AuthorController(IAuthorService AuthorService){
+    AuthorController(IAuthorService AuthorService) {
         this.service = AuthorService;
     }
 
     IAuthorService service;
 
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Data requested not found")
+    void NotFoundHandler() {
+    }
+
     @Override
     @PostMapping("/add")
-    public Author addAuthor(@RequestBody Author author) {
+    public String addAuthor(@RequestBody Author author) {
 
-        return service.addAuthor(author.getName(), author.getYear());
+        return "ok ✅";
     }
 
 
     @Override
     @GetMapping("/{authorName}")
     @ResponseBody
-    public Author findAuthor(@PathVariable String authorName) {
+    public Author findAuthor(@PathVariable String authorName) throws NotFoundException {
         return service.findAuthor(authorName);
     }
 

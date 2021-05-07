@@ -2,10 +2,9 @@ package dev.albruiz.libraryserver.Service;
 
 import dev.albruiz.libraryserver.Model.Author;
 import dev.albruiz.libraryserver.Model.Book;
+import dev.albruiz.libraryserver.Service.Exceptions.NotFoundException;
 import dev.albruiz.libraryserver.dao.IDataHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,15 +27,17 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Book findBook(String name) {
-        return dataHelper.find(name);
+    public Book findBook(String name) throws NotFoundException {
+        Book book = dataHelper.find(name);
+        if (book == null) throw new NotFoundException();
+        return book;
     }
 
     @Override
-    public Book addBook(String bookName, String authorName) {
+    public void addBook(String bookName, String authorName) throws NotFoundException {
         Author author = dataHelperAuthor.find(authorName);
-        Book book = new Book(bookName,author);
+        if (author == null) throw new NotFoundException();
+        Book book = new Book(bookName, author);
         dataHelper.add(book);
-        return  book;
     }
 }
